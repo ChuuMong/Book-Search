@@ -4,12 +4,12 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class Presenter<V extends View> {
 
-    protected final CompositeDisposable subscription;
+    protected final CompositeDisposable disposable;
 
     protected V view;
 
     public Presenter() {
-        this.subscription = new CompositeDisposable();
+        this.disposable = new CompositeDisposable();
     }
 
     public void attachView(V view) {
@@ -23,7 +23,7 @@ public abstract class Presenter<V extends View> {
     }
 
     public void detachView() {
-        subscription.dispose();
+        disposable.dispose();
 
         view = null;
     }
