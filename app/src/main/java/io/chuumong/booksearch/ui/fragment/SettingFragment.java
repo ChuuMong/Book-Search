@@ -8,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import io.chuumong.booksearch.R;
 
 public class SettingFragment extends Fragment {
-    public static SettingFragment newInstance() {
-        return new SettingFragment();
+    
+    @Inject
+    public SettingFragment() {
     }
-
 
     @Nullable
     @Override

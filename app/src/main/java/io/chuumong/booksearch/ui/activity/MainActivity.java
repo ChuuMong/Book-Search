@@ -7,18 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.chuumong.booksearch.R;
 import io.chuumong.booksearch.ui.adapter.ViewPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DaggerAppCompatActivity {
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bnView;
+
+    @Inject
+    ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
-        viewPager.setCurrentItem(0);
-        bnView.setSelectedItemId(R.id.action_search);
+        viewPager.setAdapter(viewPagerAdapter);
     }
 }

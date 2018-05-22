@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import io.chuumong.booksearch.R;
 
-public class SearchListFragment extends Fragment{
+public class SearchListFragment extends Fragment {
 
-    public static SearchListFragment newInstance() {
-        return new SearchListFragment();
+    @Inject
+    public SearchListFragment() {
     }
 
     @Nullable
