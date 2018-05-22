@@ -10,7 +10,6 @@ import io.reactivex.Single;
 
 public class SearchRepository {
 
-
     private final ApiService service;
 
     @Inject
@@ -18,7 +17,7 @@ public class SearchRepository {
         this.service = service;
     }
 
-    public Single<List<Search>> getSearchBooks(String query, int display, int start) {
+    public Single<Search> getSearchBooks(String query, int display, int start) {
         return service.getSearchBooks(query, display, start);
     }
 

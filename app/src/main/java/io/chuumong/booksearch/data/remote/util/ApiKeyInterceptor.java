@@ -9,7 +9,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ApiKeyIntercepter implements Interceptor {
+public class ApiKeyInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {

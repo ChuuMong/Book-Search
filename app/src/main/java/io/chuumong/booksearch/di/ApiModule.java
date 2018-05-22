@@ -9,7 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.chuumong.booksearch.BuildConfig;
 import io.chuumong.booksearch.data.remote.api.ApiService;
-import io.chuumong.booksearch.data.remote.util.ApiKeyIntercepter;
+import io.chuumong.booksearch.data.remote.util.ApiKeyInterceptor;
 import io.chuumong.booksearch.data.remote.util.MainThreadCallAdapter;
 import io.chuumong.booksearch.data.remote.util.NetworkErrorInterceptor;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,7 +34,7 @@ public class ApiModule {
             builder.addInterceptor(interceptor);
         }
 
-        builder.addInterceptor(new ApiKeyIntercepter());
+        builder.addInterceptor(new ApiKeyInterceptor());
         builder.addInterceptor(new NetworkErrorInterceptor());
 
         return builder.build();

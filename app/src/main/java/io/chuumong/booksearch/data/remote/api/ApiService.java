@@ -10,5 +10,5 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @GET("book.json")
-    Single<List<Search>> getSearchBooks(@Query("query") String query, @Query("display") int display, @Query("start") int start);
+    Single<Search> getSearchBooks(@Query("query") String query, @Query("display") int display, @Query("start") int start);
 }
