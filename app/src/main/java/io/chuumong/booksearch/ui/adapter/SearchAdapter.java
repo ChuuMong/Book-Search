@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +32,7 @@ import io.chuumong.booksearch.data.model.Search;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
     private final List<Book> books;
+    private OnClickBookItemListener listener;
 
     @Inject
     public SearchAdapter() {
@@ -66,7 +68,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         notifyDataSetChanged();
     }
 
+    public void setListener(OnClickBookItemListener listener) {
+        this.listener = listener;
+    }
+
     class SearchViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.layout)
+        RelativeLayout layout;
 
         @BindView(R.id.text_title)
         TextView tvTitle;
@@ -100,12 +109,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             tvTitle.setText(Html.fromHtml(book.getTitle()));
 
             if (TextUtils.isEmpty(book.getDiscount())) {
-                tvPrice.setText(String.format(Locale.getDefault(), "%,d원", Integer.valueOf(book.getPrice())));
+                tvPrice.setText(String.format(Locale.getDefault(), "%,d원",
+                        Integer.valueOf(book.getPrice())));
                 tvPrice.setPaintFlags(0);
                 tvPriceArrow.setVisibility(View.GONE);
             } else {
-                tvPrice.setText(String.format(Locale.getDefault(), "%,d원", Integer.valueOf(book.getPrice())));
-                tvDiscount.setText(String.format(Locale.getDefault(), "%,d원", Integer.valueOf(book.getDiscount())));
+                tvPrice.setText(String.format(Locale.getDefault(), "%,d원",
+                        Integer.valueOf(book.getPrice())));
+                tvDiscount.setText(String.format(Locale.getDefault(), "%,d원",
+                        Integer.valueOf(book.getDiscount())));
                 tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tvPriceArrow.setVisibility(View.VISIBLE);
             }
@@ -117,6 +129,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
             Glide.with(itemView.getContext()).load(book.getImage()).into(ivBook);
+
+            layout.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onClickBookItem(book);
+                }
+            });
         }
+    }
+
+    public interface OnClickBookItemListener {
+        void onClickBookItem(Book book);
     }
 }

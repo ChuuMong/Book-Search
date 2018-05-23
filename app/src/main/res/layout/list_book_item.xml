@@ -8,8 +8,10 @@
     android:layout_marginRight="16dp">
 
     <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         android:padding="8dp">
 
         <ImageView
@@ -49,6 +51,7 @@
                 android:id="@+id/image_price_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="4dp"
                 android:src="@drawable/ic_trending_flat_light_gray_16dp" />
 

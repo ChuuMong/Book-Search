@@ -1,5 +1,7 @@
 package io.chuumong.booksearch.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,12 +21,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 import io.chuumong.booksearch.R;
+import io.chuumong.booksearch.data.model.Book;
 import io.chuumong.booksearch.data.model.Search;
 import io.chuumong.booksearch.presenter.search.SearchPresenter;
 import io.chuumong.booksearch.ui.adapter.SearchAdapter;
 import io.chuumong.booksearch.ui.view.InfiniteScrollListener;
 
-public class SearchFragment extends DaggerFragment implements io.chuumong.booksearch.presenter.search.SearchView {
+public class SearchFragment extends DaggerFragment implements io.chuumong.booksearch.presenter.search.SearchView,
+        SearchAdapter.OnClickBookItemListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
@@ -68,6 +72,7 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
 
         rvSearch.setLayoutManager(layoutManager);
         rvSearch.setAdapter(searchAdapter);
+        searchAdapter.setListener(this);
 
         rvSearch.addOnScrollListener(new InfiniteScrollListener() {
             @Override
@@ -133,5 +138,10 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
     @Override
     public void hideProgress() {
         progress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onClickBookItem(Book book) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(book.getLink())));
     }
 }
