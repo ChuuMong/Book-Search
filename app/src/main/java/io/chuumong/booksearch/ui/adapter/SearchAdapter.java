@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import io.chuumong.booksearch.R;
 import io.chuumong.booksearch.data.model.Book;
 import io.chuumong.booksearch.data.model.Search;
+import io.chuumong.booksearch.util.StringUtil;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
@@ -94,9 +95,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         @BindView(R.id.text_pub_date)
         TextView tvPubDate;
 
-        @BindView(R.id.text_description)
-        TextView tvDesciption;
-
         @BindView(R.id.image_book)
         ImageView ivBook;
 
@@ -109,24 +107,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             tvTitle.setText(Html.fromHtml(book.getTitle()));
 
             if (TextUtils.isEmpty(book.getDiscount())) {
-                tvPrice.setText(String.format(Locale.getDefault(), "%,d원",
-                        Integer.valueOf(book.getPrice())));
+                tvPrice.setText(StringUtil.parserPrice(book.getPrice()));
                 tvPrice.setPaintFlags(0);
                 tvPriceArrow.setVisibility(View.GONE);
             } else {
-                tvPrice.setText(String.format(Locale.getDefault(), "%,d원",
-                        Integer.valueOf(book.getPrice())));
-                tvDiscount.setText(String.format(Locale.getDefault(), "%,d원",
-                        Integer.valueOf(book.getDiscount())));
+                tvPrice.setText(StringUtil.parserPrice(book.getPrice()));
+                tvDiscount.setText(StringUtil.parserPrice(book.getDiscount()));
                 tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tvPriceArrow.setVisibility(View.VISIBLE);
             }
 
-            tvAuthor.setText(Html.fromHtml(book.getAuthor()));
-            tvPublisher.setText(Html.fromHtml(book.getPublisher()));
-            tvPubDate.setText(book.getPubdate());
-            tvDesciption.setText(Html.fromHtml(book.getDescription()));
-
+            tvAuthor.setText(Html.fromHtml(book.getAuthor().replace("|", ",")));
+            tvPublisher.setText(Html.fromHtml(book.getPublisher().replace("|", ",")));
+            tvPubDate.setText(StringUtil.parserDate(book.getPubdate()));
 
             Glide.with(itemView.getContext()).load(book.getImage()).into(ivBook);
 
