@@ -12,7 +12,7 @@ import io.chuumong.booksearch.App;
 import io.chuumong.booksearch.di.activity.ActivityBindingModule;
 
 @Singleton
-@Component(modules = {AppModule.class, ApiModule.class, ActivityBindingModule.class, AndroidSupportInjectionModule.class})
+@Component(modules = {AppModule.class, ApiModule.class, DatabaseModule.class, ActivityBindingModule.class, AndroidSupportInjectionModule.class})
 public interface AppComponent extends AndroidInjector<App> {
 
     @Component.Builder

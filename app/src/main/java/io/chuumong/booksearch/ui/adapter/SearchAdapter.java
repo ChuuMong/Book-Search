@@ -15,19 +15,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.chuumong.booksearch.R;
-import io.chuumong.booksearch.data.model.Book;
-import io.chuumong.booksearch.data.model.Search;
+import io.chuumong.booksearch.data.remote.model.Book;
+import io.chuumong.booksearch.data.remote.model.Search;
 import io.chuumong.booksearch.util.StringUtil;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {

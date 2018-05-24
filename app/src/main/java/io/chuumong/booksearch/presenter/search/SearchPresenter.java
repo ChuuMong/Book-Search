@@ -1,15 +1,26 @@
 package io.chuumong.booksearch.presenter.search;
 
+import android.util.Log;
+
+import java.util.Date;
+
 import javax.inject.Inject;
 
+import io.chuumong.booksearch.data.local.model.SearchHistory;
+import io.chuumong.booksearch.data.repository.SearchHistoryRepository;
 import io.chuumong.booksearch.data.repository.SearchRepository;
 import io.chuumong.booksearch.presenter.Presenter;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenter extends Presenter<SearchView> {
 
+    private static final String TAG = SearchPresenter.class.getSimpleName();
+
     private static final int MAX_SEARCH_COUNT = 20;
 
-    private final SearchRepository repository;
+    private final SearchRepository searchRepository;
+    private final SearchHistoryRepository searchHistoryRepository;
 
     private int currentStart = 1;
     private int totalCount = 0;
@@ -18,8 +29,9 @@ public class SearchPresenter extends Presenter<SearchView> {
     private boolean isSearch = false;
 
     @Inject
-    public SearchPresenter(SearchRepository repository) {
-        this.repository = repository;
+    public SearchPresenter(SearchRepository searchRepository, SearchHistoryRepository searchHistoryRepository) {
+        this.searchRepository = searchRepository;
+        this.searchHistoryRepository = searchHistoryRepository;
     }
 
     public void sendSearchQuery(String query) {
@@ -33,7 +45,7 @@ public class SearchPresenter extends Presenter<SearchView> {
         initSearchInfo(query);
         setIsSearch(true);
 
-        disposable.add(repository.getSearchBooks(query, MAX_SEARCH_COUNT, currentStart)
+        disposable.add(searchRepository.getSearchBooks(query, MAX_SEARCH_COUNT, currentStart)
                 .doFinally(() -> {
                     setIsSearch(false);
                     view.hideProgress();
@@ -41,7 +53,16 @@ public class SearchPresenter extends Presenter<SearchView> {
                 .subscribe(search -> {
                             totalCount = search.getTotal();
                             view.sendSearchResult(search);
+                            saveSearch(query);
                         },
+                        throwable -> view.showErrorMessage(throwable)));
+    }
+
+    private void saveSearch(String query) {
+        disposable.add(searchHistoryRepository.insertSearchHistory(
+                new SearchHistory(0, query, new Date().getTime()))
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> Log.d(TAG, "saveSearch#finish save search"),
                         throwable -> view.showErrorMessage(throwable)));
     }
 
@@ -56,7 +77,7 @@ public class SearchPresenter extends Presenter<SearchView> {
         setIsSearch(true);
         addSearchCount();
 
-        disposable.add(repository.getSearchBooks(query, MAX_SEARCH_COUNT, currentStart)
+        disposable.add(searchRepository.getSearchBooks(query, MAX_SEARCH_COUNT, currentStart)
                 .doFinally(() -> {
                     setIsSearch(false);
                     view.hideProgress();

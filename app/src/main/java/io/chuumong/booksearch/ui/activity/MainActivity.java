@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.chuumong.booksearch.R;
+import io.chuumong.booksearch.data.local.model.SearchHistory;
 import io.chuumong.booksearch.ui.adapter.ViewPagerAdapter;
 
 public class MainActivity extends DaggerAppCompatActivity {
@@ -60,24 +61,26 @@ public class MainActivity extends DaggerAppCompatActivity {
             }
         });
 
-        bnView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_search:
-                        viewPager.setCurrentItem(0, true);
-                        break;
-                    case R.id.action_search_list:
-                        viewPager.setCurrentItem(1, true);
-                        break;
-                    case R.id.action_setting:
-                        viewPager.setCurrentItem(2, true);
-                        break;
-                }
-                return true;
+        bnView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_search:
+                    viewPager.setCurrentItem(0, true);
+                    break;
+                case R.id.action_search_list:
+                    viewPager.setCurrentItem(1, true);
+                    break;
+                case R.id.action_setting:
+                    viewPager.setCurrentItem(2, true);
+                    break;
             }
+            return true;
         });
 
         viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    public void sendSearch(String query) {
+        viewPager.setCurrentItem(0, true);
+        viewPagerAdapter.getSearchFragment().getQuerySubject().onNext(query);
     }
 }

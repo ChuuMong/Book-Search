@@ -1,8 +1,6 @@
 package io.chuumong.booksearch.data.remote.api;
 
-import java.util.List;
-
-import io.chuumong.booksearch.data.model.Search;
+import io.chuumong.booksearch.data.remote.model.Search;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

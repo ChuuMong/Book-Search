@@ -1,18 +1,13 @@
 package io.chuumong.booksearch.ui.adapter;
 
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
 import io.chuumong.booksearch.ui.fragment.FragmentHolder;
 import io.chuumong.booksearch.ui.fragment.SearchFragment;
-import io.chuumong.booksearch.ui.fragment.SearchListFragment;
-import io.chuumong.booksearch.ui.fragment.SettingFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -30,7 +25,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return fragmentHolder.getSearchFragment();
             case 1:
-                return fragmentHolder.getSearchListFragment();
+                return fragmentHolder.getSearchHistoryFragment();
             case 2:
                 return fragmentHolder.getSettingFragment();
         }
@@ -43,8 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        // super.destroyItem(container, position, object);
+    public SearchFragment getSearchFragment() {
+        return fragmentHolder.getSearchFragment();
     }
 }

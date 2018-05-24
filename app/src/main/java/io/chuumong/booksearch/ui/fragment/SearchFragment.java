@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -12,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
@@ -22,16 +22,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 import io.chuumong.booksearch.R;
-import io.chuumong.booksearch.data.model.Book;
-import io.chuumong.booksearch.data.model.Search;
+import io.chuumong.booksearch.data.remote.model.Book;
+import io.chuumong.booksearch.data.remote.model.Search;
 import io.chuumong.booksearch.presenter.search.SearchPresenter;
 import io.chuumong.booksearch.ui.adapter.SearchAdapter;
 import io.chuumong.booksearch.ui.view.InfiniteScrollListener;
+import io.reactivex.subjects.PublishSubject;
 
 public class SearchFragment extends DaggerFragment implements io.chuumong.booksearch.presenter.search.SearchView,
         SearchAdapter.OnClickBookItemListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
+
+    private final PublishSubject<String> querySubject = PublishSubject.create();
 
     @Inject
     public SearchFragment() {
@@ -53,9 +56,6 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
     SearchPresenter presenter;
 
     @Inject
-    LinearLayoutManager layoutManager;
-
-    @Inject
     SearchAdapter searchAdapter;
 
     @Nullable
@@ -71,7 +71,7 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
         ButterKnife.bind(this, view);
         presenter.attachView(this);
 
-        rvSearch.setLayoutManager(layoutManager);
+        rvSearch.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSearch.setAdapter(searchAdapter);
         searchAdapter.setListener(this);
 
@@ -80,6 +80,11 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
             public void onLoadMore() {
                 presenter.moreGetSearch();
             }
+        });
+
+        querySubject.subscribe(query -> {
+            searchView.onActionViewExpanded();
+            searchView.setQuery(query, true);
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -144,5 +149,9 @@ public class SearchFragment extends DaggerFragment implements io.chuumong.bookse
     @Override
     public void onClickBookItem(Book book) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(book.getLink())));
+    }
+
+    public PublishSubject<String> getQuerySubject() {
+        return querySubject;
     }
 }

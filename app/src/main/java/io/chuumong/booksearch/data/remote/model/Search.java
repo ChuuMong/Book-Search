@@ -1,4 +1,4 @@
-package io.chuumong.booksearch.data.model;
+package io.chuumong.booksearch.data.remote.model;
 
 import java.util.List;
 

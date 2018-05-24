@@ -1,10 +1,8 @@
 package io.chuumong.booksearch.data.repository;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import io.chuumong.booksearch.data.model.Search;
+import io.chuumong.booksearch.data.remote.model.Search;
 import io.chuumong.booksearch.data.remote.api.ApiService;
 import io.reactivex.Single;
 
