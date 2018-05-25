@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="46dp"
+
         android:background="?attr/selectableItemBackground">
 
         <TextView
@@ -42,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:clickable="true"
             android:layout_marginRight="16dp"
             android:background="@null"
             android:src="@drawable/ic_delete_light_gray_28dp" />

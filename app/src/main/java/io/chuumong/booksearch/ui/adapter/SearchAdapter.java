@@ -32,6 +32,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     private List<Book> books = new ArrayList<>();
 
+    private final OnClickBookItemListener listener;
+
+    public SearchAdapter(OnClickBookItemListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -90,7 +96,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(Book book) {
+        void bind(final Book book) {
             tvTitle.setText(Html.fromHtml(book.getTitle()));
 
             if (TextUtils.isEmpty(book.getDiscount())) {
@@ -110,7 +116,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             tvPubDate.setText(StringUtil.parserDate(book.getPubdate()));
 
             Glide.with(itemView.getContext()).load(book.getImage()).into(ivBook);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickBookItem(book);
+                }
+            });
         }
+    }
+
+    public interface OnClickBookItemListener {
+        void onClickBookItem(Book book);
     }
 
 }

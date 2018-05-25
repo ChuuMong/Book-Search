@@ -1,5 +1,7 @@
 package io.chuumong.booksearch.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,16 +16,22 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.chuumong.booksearch.R;
+import io.chuumong.booksearch.date.local.DatabaseModule;
+import io.chuumong.booksearch.date.local.model.SearchHistory;
 import io.chuumong.booksearch.date.remote.NetworkRequestModule;
+import io.chuumong.booksearch.date.remote.model.Book;
 import io.chuumong.booksearch.date.remote.model.Search;
 import io.chuumong.booksearch.ui.adapter.SearchAdapter;
 import io.chuumong.booksearch.ui.view.InfiniteScrollListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 /**
  * Created by jonghunlee on 2018-05-25.
@@ -83,7 +91,13 @@ public class SearchFragment extends Fragment {
         });
 
         rvSearch.setLayoutManager(new LinearLayoutManager(getActivity()));
-        searchAdapter = new SearchAdapter();
+        searchAdapter = new SearchAdapter(new SearchAdapter.OnClickBookItemListener() {
+            @Override
+            public void onClickBookItem(Book book) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(book.getLink())));
+            }
+        });
+
         rvSearch.setAdapter(searchAdapter);
         rvSearch.addOnScrollListener(new InfiniteScrollListener() {
             @Override
@@ -114,6 +128,9 @@ public class SearchFragment extends Fragment {
 
                         setIsSearch(false);
                         totalCount = search.getTotal();
+
+                        DatabaseModule.save(getActivity(),
+                                new SearchHistory(0, query, new Date().getTime()));
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -205,5 +222,10 @@ public class SearchFragment extends Fragment {
 
     public void hideProgress() {
         progress.setVisibility(View.GONE);
+    }
+
+    public void sendSearch(String search) {
+        searchView.onActionViewExpanded();
+        searchView.setQuery(search, true);
     }
 }

@@ -78,4 +78,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void sendSearch(String search) {
+        viewPager.setCurrentItem(0);
+        viewPagerAdapter.getSearchFragment().sendSearch(search);
+    }
 }
