@@ -16,6 +16,10 @@ public class StringUtil {
     private static final String TAG = StringUtil.class.getSimpleName();
 
     public static String parserDate(String strDate) {
+        if (strDate.length() != 8) {
+            return strDate;
+        }
+
         Date date;
 
         try {
@@ -34,6 +38,18 @@ public class StringUtil {
     }
 
     public static String parserPrice(String price) {
-        return String.format(Locale.getDefault(), "%,d원", Integer.valueOf(price));
+        try {
+            return String.format(Locale.getDefault(), "%,d원", Integer.valueOf(price));
+        } catch (NumberFormatException e1) {
+            try {
+                return String.format(Locale.getDefault(), "%,d원", Float.valueOf(price));
+            } catch (NumberFormatException e2) {
+                return "";
+            }
+        }
+    }
+
+    public static String parserPrice(int price) {
+        return String.format(Locale.getDefault(), "%,d원", price);
     }
 }
