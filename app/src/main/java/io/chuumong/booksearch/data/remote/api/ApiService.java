@@ -1,14 +1,12 @@
 package io.chuumong.booksearch.data.remote.api;
 
 import io.chuumong.booksearch.data.remote.model.Search;
-import retrofit2.Call;
+import io.reactivex.Single;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
-/**
- * Created by jonghunlee on 2018-05-25.
- */
 public interface ApiService {
 
-
-    Call<Search> getSearchBook(String query, int display, int start);
-
+    @GET("book.json")
+    Single<Search> getSearchBooks(@Query("query") String query, @Query("display") int display, @Query("start") int start);
 }

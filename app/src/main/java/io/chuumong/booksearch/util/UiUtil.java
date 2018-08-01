@@ -5,9 +5,10 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
 /**
- * Created by jonghunlee on 2018-05-25.
+ * Created by jonghunlee on 2018-05-24.
  */
 public class UiUtil {
+
     public static float convertPxToDp(float px) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);

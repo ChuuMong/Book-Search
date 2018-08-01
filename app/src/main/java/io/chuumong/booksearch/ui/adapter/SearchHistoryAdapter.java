@@ -1,6 +1,8 @@
 package io.chuumong.booksearch.ui.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -8,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,17 +21,52 @@ import io.chuumong.booksearch.util.DateUtil;
 import io.chuumong.booksearch.util.UiUtil;
 
 /**
- * Created by jonghunlee on 2018-05-25.
+ * Created by jonghunlee on 2018-05-24.
  */
-public class SearchHistoryAdapter {
+public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder> {
 
-    private final List<SearchHistory> searchHistories = new ArrayList<>();
-    private final OnClickSearchHistoryListener listener;
+    private final List<SearchHistory> searchHistories;
 
-    public SearchHistoryAdapter(OnClickSearchHistoryListener listener) {
+    private OnClickSearchHistoryListener listener;
+
+    @Inject
+    public SearchHistoryAdapter() {
+        searchHistories = new ArrayList<>();
+    }
+
+    @NonNull
+    @Override
+    public SearchHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new SearchHistoryViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_search_history_item, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull SearchHistoryViewHolder holder, int position) {
+        holder.bind(searchHistories.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return searchHistories.size();
+    }
+
+    public void setListener(OnClickSearchHistoryListener listener) {
         this.listener = listener;
     }
 
+    public void addAll(List<SearchHistory> searchHistories) {
+        this.searchHistories.clear();
+        this.searchHistories.addAll(searchHistories);
+        notifyDataSetChanged();
+    }
+
+    public void delete(int position) {
+        if (position != -1) {
+            searchHistories.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
 
     class SearchHistoryViewHolder extends RecyclerView.ViewHolder {
 
@@ -45,7 +84,7 @@ public class SearchHistoryAdapter {
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(final SearchHistory searchHistory) {
+        void bind(SearchHistory searchHistory) {
             if (getAdapterPosition() == 0) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) itemView.getLayoutParams();
                 params.topMargin = (int) UiUtil.convertDpToPx(8);
@@ -55,19 +94,10 @@ public class SearchHistoryAdapter {
             tvHistory.setText(searchHistory.getSearch());
             tvDate.setText(DateUtil.parserHistoryDate(searchHistory.getDate()));
 
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onClickDelete(searchHistory, getAdapterPosition());
-                }
-            });
+            ibDelete.setOnClickListener(
+                    v -> listener.onClickDelete(searchHistory, getAdapterPosition()));
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onClickItem(searchHistory);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onClickItem(searchHistory));
         }
     }
 
@@ -76,5 +106,4 @@ public class SearchHistoryAdapter {
 
         void onClickDelete(SearchHistory searchHistory, int position);
     }
-
 }

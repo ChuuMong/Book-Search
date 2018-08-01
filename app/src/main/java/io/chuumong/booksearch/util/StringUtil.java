@@ -8,11 +8,9 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by jonghunlee on 2018-05-25.
+ * Created by jonghunlee on 2018-05-24.
  */
 public class StringUtil {
-
-
     private static final String TAG = StringUtil.class.getSimpleName();
 
     public static String parserDate(String strDate) {
@@ -24,7 +22,6 @@ public class StringUtil {
             Log.e(TAG, "parserDate", e);
             return null;
         }
-
 
         if (date == null) {
             return null;
